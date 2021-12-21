@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Hard Rock Solution - Song Lyric App</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Custom css -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #img{
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar  navbar-dark my-3">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Hard Rock Solution">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+                aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="images/toggler-icon.svg" alt="">
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavId">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownId">
+                            <a class="dropdown-item" href="#">Action 1</a>
+                            <a class="dropdown-item" href="#">Action 2</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <div class="search-bar col-md-6 mx-auto">
+                <h1 class="text-center">Hard Rock Lyric Search</h1>
+                <div class="search-box my-5">
+                    <input type="text" id="search-song" class="form-control" placeholder="Enter your artist song name">
+                    <button id="load-btn" class="btn btn-success search-btn">Search</button>
+                </div>
+            </div>
+            <!-- Single Lyrics -->
+            <div id="single" class="single-lyrics text-center">
+                
+            </div>
+            <div id="results" class="search-result col-md-8 mx-auto py-4">
+            
+
+            </div>
+
+            <div id="lyric">
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+
+
+
+
+const loadBtn = document.getElementById('load-btn').addEventListener('click', function(){
+const single = document.getElementById('results');
+single.innerHTML = '';
+const input = document.getElementById('search-song').value;
+
+fetch(`https://api.lyrics.ovh/suggest/${input}`)
+.then(res => res.json())
+.then(data => {
+    console.log(data);
+    for (let i = 0; i < data.data.length; i++) {
+        const element = data.data[i];
+
+        // const getData = (data.data[0]);  
+const artist = (element.artist.name);
+const getDataTitle = element.title;
+console.log(getDataTitle);
+const cover = (element.link)
+
+const storeData = document.createElement('p');
+storeData.innerHTML = `
+<div class="single-result row align-items-center my-3 p-3">
+        <div  class="col-md-9">
+            <h3 class = "text-font">${getDataTitle}</h3>
+            <p class="author lead">Album by <span>${element.album.title}</span></p>
+            <p> <img id = "artist-img" src = "${element.artist.picture}" > <p class = author lead>${artist}</p></p>
+            
+            <audio controls>
+            <source src="${element.preview}" type="audio/mpeg">
+            </audio>
+        </div>
+        <div class="col-md-3 text-md-right text-center">
+            <img id = "img" src = "${element.album.cover}">
+        </div>
+</div>
+`;
+single.appendChild(storeData)
+    }
+})
+})
+
+function getLyric(artistName, lyricsTitle) {
+    fetch(`https://api.lyrics.ovh/v1/${artistName}/${lyricsTitle}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        const fullLyrics = (data.lyrics);
+        console.log(fullLyrics)
+        const findLyric = document.getElementById('lyric');
+       findLyric.innerHTML = `${fullLyrics}`;
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // const loadBtn = document.getElementById('load-btn').addEventListener('click', function(){
+
+        // const single = document.getElementById('results');
+        // single.innerHTML = '';
+        // const input = document.getElementById('search-song').value;
+        // fetch(`https://api.lyrics.ovh/suggest/${input}`)
+        // .then(res => res.json())
+        // .then(data => {
+        //     console.log(data);
+        //     for (let i = 0; i < data.data.length; i++) {
+        //         const element = data.data[i];
+        //         console.log(element)
+        //     }
+        // const getData = (data.data[0]);
+        // const artist = (getData.artist.name);
+        // const getDataTitle = getData.title;
+        // const cover = (getData.link)
+        // console.log(artist)
+
+        // const storeData = document.createElement('p');
+        // storeData.innerHTML = `
+        // <div class="single-result row align-items-center my-3 p-3">
+        //             <div class="col-md-9">
+        //                 <h3 class="lyrics-name">${getDataTitle}</h3>
+        //                 <p class="author lead">Album by <span>${getData.album.title}</span></p>
+        //                 <p class = author lead>${artist}</p>
+        //                 <a href = "${cover}" class = author lead><button class = "btn btn-info">PLAY</button></a>
+        //                 <button onclick = "getLyric(${artist}, ${getDataTitle})" class="btn btn-success">Get Lyrics</button>
+        //             </div>
+        //             <div class="col-md-3 text-md-right text-center">
+        //                 <img id = "img" src = "${getData.album.cover}">
+        //             </div>
+        //         </div>
+        // `;
+        // single.appendChild(storeData)
+        // })
+        // })
+
+
+        // function getLyric(artistName, lyricsTitle) {
+        //     fetch(`https://api.lyrics.ovh/v1/${artistName}/${lyricsTitle}`)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         const fullLyrics = (data.lyrics);
+        //         console.log(fullLyrics)
+        //         const findLyric = document.getElementById('lyric');
+        //        findLyric.innerHTML = `${fullLyrics}`;
+
+        //     })
+        // }
+    </script>
+
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <!-- Custom Script Here -->
+
+</body>
+
+</html>
